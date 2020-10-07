@@ -3,7 +3,6 @@ package com.example.gracefullshutdown
 import org.apache.catalina.core.StandardContext
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer
@@ -33,7 +32,7 @@ class ServletContainerConfiguration {
             if (it is StandardContext) {
                 val context = it
                 log.info("Current context unloadDelay: {}", context.unloadDelay)
-                context.unloadDelay = applicationConfig.getUnloadDelayTimeInMs()
+                context.unloadDelay = applicationConfig.unloadDelay.toMillis()
                 log.info("Updated context unloadDelay: {}", context.unloadDelay)
             }
         })
@@ -47,7 +46,7 @@ class ServletContainerConfiguration {
 
 
 @RestController
-class LongPauseController {
+class LongPauseController (private val applicationConfig: ApplicationConfig){
 
     @GetMapping("/test")
     fun longPause(): ResponseEntity<String> {
