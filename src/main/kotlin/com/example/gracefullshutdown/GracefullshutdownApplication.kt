@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.context.ContextCleanupListener
+import java.time.Duration
+import javax.servlet.ServletContextEvent
+
 
 @SpringBootApplication
 @EnableConfigurationProperties(value = [ApplicationConfig::class])
@@ -46,12 +50,12 @@ class ServletContainerConfiguration {
 
 
 @RestController
-class LongPauseController (private val applicationConfig: ApplicationConfig){
+class LongPauseController(private val applicationConfig: ApplicationConfig){
 
     @GetMapping("/test")
     fun longPause(): ResponseEntity<String> {
         log.info("processing....")
-        Thread.sleep(30 * 1000)
+        Thread.sleep(Duration.ofSeconds(10).toMillis())
         log.info("processed !!!")
         return ResponseEntity.ok("Done!!")
     }

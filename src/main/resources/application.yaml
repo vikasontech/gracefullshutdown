@@ -1,9 +1,5 @@
 server:
-  shutdown: GRACEFUL
   port: 8081
-spring:
-  lifecycle:
-    timeout-per-shutdown-phase: 10s
 
 
 management:
