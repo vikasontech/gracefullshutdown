@@ -1,15 +1,21 @@
 server:
   shutdown: GRACEFUL
-  port: 8081
+  port: 8080
 spring:
   lifecycle:
     timeout-per-shutdown-phase: 10s
 
 
 management:
-  metrics:
-    enable:
-      all: true
+  endpoint:
+    shutdown:
+      enabled: true
 
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*"
 application:
   unloadDelay: 2m
+

@@ -13,26 +13,28 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.Duration
 
 @SpringBootApplication
 @EnableConfigurationProperties(value = [ApplicationConfig::class])
-class GracefullshutdownApplication
+class GraceFullShutdownExample
 
 fun main(args: Array<String>) {
-    runApplication<GracefullshutdownApplication>(*args)
+    runApplication<GraceFullShutdownExample>(*args)
 }
 
 @Configuration
 class ServletContainerConfiguration {
 
     @Bean
+    @Suppress("unused")
     fun servletWebServerFactory(applicationConfig: ApplicationConfig): ServletWebServerFactory {
         val serverFactory = TomcatServletWebServerFactory()
         serverFactory.addContextCustomizers(TomcatContextCustomizer {
             if (it is StandardContext) {
                 val context = it
                 log.info("Current context unloadDelay: {}", context.unloadDelay)
-                context.unloadDelay = applicationConfig.unloadDelay.toMillis()
+                context.unloadDelay = Duration.ofMinutes(2).toMillis()
                 log.info("Updated context unloadDelay: {}", context.unloadDelay)
             }
         })
@@ -46,14 +48,13 @@ class ServletContainerConfiguration {
 
 
 @RestController
-class LongPauseController (private val applicationConfig: ApplicationConfig){
+class LongPauseController (){
 
     @GetMapping("/test")
-    fun longPause(): ResponseEntity<String> {
-        log.info("processing....")
-        Thread.sleep(30 * 1000)
-        log.info("processed !!!")
-        return ResponseEntity.ok("Done!!")
+    fun longPause(): ResponseEntity<String> { log.info("I AM STILL PROCESSING WILL TAKE AROUND 60 SECS. TO FINISH. PLEASE WAIT ....")
+        Thread.sleep(60 * 1000)
+        log.info("FINALLY! I AM DONE. YOU CAN SHUTDOWN NOW. :)")
+        return ResponseEntity.ok("Thank you for waiting.")
     }
 
     companion object {
