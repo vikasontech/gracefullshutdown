@@ -5,7 +5,7 @@ server:
 management:
   metrics:
     enable:
-      all: true
+      all: false
 
 application:
   unloadDelay: 2m

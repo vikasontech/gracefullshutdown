@@ -57,7 +57,7 @@ class LongPauseController(private val applicationConfig: ApplicationConfig){
         log.info("processing....")
         Thread.sleep(Duration.ofSeconds(10).toMillis())
         log.info("processed !!!")
-        return ResponseEntity.ok("Done!!")
+        return ResponseEntity.ok("Thank you for waiting !!")
     }
 
     companion object {
